@@ -47,6 +47,29 @@ def getcoolingdata():
     coolingdata = json.dumps(coolingdata)
     return coolingdata
 
+@app.route('/get/create_cooling_main', methods = ['GET', 'POST'])
+def createcoolingmain():
+    data = request.json
+    date = data['date']
+    trolley = data['trolleyNo']
+    product = data['product']
+    shftprod = data['shiftProduced']
+    quant = data['quantity']
+    coolingtime = data['coolingTime']
+    u_key = data['u_key']
+    updatedata = data_storage.create_cooling_main(date,trolley,product,shftprod,quant,coolingtime,u_key)
+    return updatedata
+
+@app.route('/get/create_cooling_packaging', methods = ['GET', 'POST'])
+def createcoolingpackaging():
+    data = request.json
+    u_key = data['u_key']
+    trolley = data['trolleyNo']
+    status = data['status']
+    time = data['time']
+    updatedata = data_storage.create_cooling_packaging(u_key,trolley,status,time)
+    return updatedata
+
 @app.route('/get/create_user', methods = ['GET', 'POST'])
 def createuser():
     data = request.json
