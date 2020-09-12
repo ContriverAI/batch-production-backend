@@ -14,7 +14,6 @@ def getusers():
     data = request.json
     username = data['username']
     username = username.lower()
-    username = username.capitalize()
     passw = data['password']
     users = data_storage.get_users()
     try:
@@ -85,5 +84,13 @@ def deleteuser():
     u_key = data['u_key']
     user = data_storage.delete_user(u_key)
     return user
+
+@app.route('/get/allusers', methods = ['GET', 'POST'])
+def allusers():
+    data = data_storage.get_users()
+    data = data.to_json(orient="split")
+    data = json.loads(data)
+    data = json.dumps(data)
+    return data
 
 app.run(host='0.0.0.0', port=9002)
