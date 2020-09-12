@@ -50,6 +50,7 @@ def getcoolingdata():
 @app.route('/get/create_cooling_main', methods = ['GET', 'POST'])
 def createcoolingmain():
     data = request.json
+    print(data)
     date = data['date']
     trolley = data['trolleyNo']
     product = data['product']
@@ -63,6 +64,7 @@ def createcoolingmain():
 @app.route('/get/create_cooling_packaging', methods = ['GET', 'POST'])
 def createcoolingpackaging():
     data = request.json
+    print(data)
     u_key = data['u_key']
     trolley = data['trolleyNo']
     status = data['status']
@@ -115,4 +117,4 @@ def allusers():
     data = json.dumps(data)
     return data
 
-app.run(host='0.0.0.0', port=9002)
+app.run(host='0.0.0.0', port=9001)

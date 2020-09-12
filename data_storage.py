@@ -13,22 +13,23 @@ def cooling():
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,coolingtime,u_key):
-    try:
-        query = "insert into Cooling values('"+date+"','"+trolley+"','"+product+"','"+shftprod+"','"+quant+"','"+coolingtime+"','"+u_key+"');"
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully..!"
-    except:
-        return "Something Went Wrong..!"
+    
+    
+    query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+shftprod+"','"+coolingtime+"',' ',' ','"+u_key+"');"
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Record Added Successfully..!"
+    #except:
+    #    return "Something Went Wrong..!"
 
 def create_cooling_packaging(u_key,trolley,status,time):
-    try:
-        query = "update Cooling set status = '"+status+"', 'complete time' = '"+time+"' where u_key = '"+u_key+"' and trolley = '"+trolley+"';"
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully..!"
-    except:
-        return "Something Went Wrong..!"
+    
+    query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"' where u_key = '"+u_key+"' and trolley = '"+str(trolley)+"';"
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Record Added Successfully..!"
+    #except:
+    #    return "Something Went Wrong..!"
         
 def u_key():
     data = pd.read_sql("select u_key from users;", engine)
