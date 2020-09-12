@@ -3,6 +3,8 @@ import threading
 import pandas as pd
 import data_storage
 from flask_cors import CORS
+import uuid
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -19,13 +21,15 @@ def getusers():
         try:
             role = users.loc[(users['username']==username) & (users['passwords']==passw),'role'].iloc[0]
             designation = users.loc[(users['username']==username) & (users['passwords']==passw),'designation'].iloc[0]
+            u_key = users.loc[(users['username']==username) & (users['passwords']==passw),'u_key'].iloc[0]
         except:
             pass
         if len(users[(users['username']==username) & (users['passwords'] == passw)])>0:
             a = {
                 "username" : username,
-                "designation":designation,
-                "role":role
+                "designation" : designation,
+                "role" : role,
+                "u_key" : u_key
             }
             return jsonify(a)
         else:
@@ -40,6 +44,46 @@ def getcoolingdata():
     data = request.json
     coolingdata = data_storage.cooling()
     coolingdata = coolingdata.to_json(orient="split")
-    return jsonify(coolingdata)
+    coolingdata = json.loads(coolingdata)
+    coolingdata = json.dumps(coolingdata)
+    return coolingdata
 
-app.run(host='0.0.0.0', port=9001)
+@app.route('/get/create_user', methods = ['GET', 'POST'])
+def createuser():
+    data = request.json
+    username = data['username']
+    password = data['password']
+    designation = data['designation']
+    role = data['role']
+    all_ukey = data_storage.u_key()
+    ids = uuid.uuid1()
+    ids = str(ids)
+    token = True
+    while token:
+        if ids in all_ukey:
+            ids = uuid.uuid1()
+            ids = str(ids)
+        else:
+            token = False
+    user = data_storage.create_user(username,password,designation,role,ids)
+    return user
+
+@app.route('/get/update_user', methods = ['GET', 'POST'])
+def updateuser():
+    data = request.json
+    username = data['username']
+    password = data['password']
+    designation = data['designation']
+    role = data['role']
+    u_key = data['u_key']
+    user = data_storage.update_user(username,password,designation,role,u_key)
+    return user
+
+@app.route('/get/delete_user', methods = ['GET', 'POST'])
+def deleteuser():
+    data = request.json
+    u_key = data['u_key']
+    user = data_storage.delete_user(u_key)
+    return user
+
+app.run(host='0.0.0.0', port=9002)
