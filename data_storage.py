@@ -29,12 +29,12 @@ def create_user(username,password,designation,role,ids):
         return 'New User Added'
     return "Something Went Wrong..!"
 
-def update_user(username,password,designation,role,u_key):
+def update_user(username,password,designation,role):
     query = "select * from users;"
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df['username']==username))[0])
     if len(index_num)>0:
-        query = "UPDATE users SET passwords = '"+password+"', role = '"+role+"', designation = '"+designation+"' where u_key = '"+u_key+"';"
+        query = "UPDATE users SET passwords = '"+password+"', role = '"+role+"', designation = '"+designation+"' where username = '"+username+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return 'Successfully Updated User'    
@@ -43,8 +43,8 @@ def update_user(username,password,designation,role,u_key):
 
 def delete_user(u_key):
     df = pd.read_sql("select * from users;",engine)
-    if(len(df.loc[df['u_key']==u_key])):
-        query = "Delete from users where u_key='"+u_key+"';"
+    if(len(df.loc[df['username']==u_key])):
+        query = "Delete from users where username='"+u_key+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Deleted Record"

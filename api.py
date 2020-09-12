@@ -74,14 +74,13 @@ def updateuser():
     password = data['password']
     designation = data['designation']
     role = data['role']
-    u_key = data['u_key']
-    user = data_storage.update_user(username,password,designation,role,u_key)
+    user = data_storage.update_user(username,password,designation,role)
     return user
 
 @app.route('/get/delete_user', methods = ['GET', 'POST'])
 def deleteuser():
     data = request.json
-    u_key = data['u_key']
+    u_key = data['username']
     user = data_storage.delete_user(u_key)
     return user
 
