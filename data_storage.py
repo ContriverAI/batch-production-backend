@@ -88,3 +88,13 @@ def updateconfig(productname,productcode,duration):
         return "Successfully Updated Duration"
     except:
         return  "Something Went Wrong..!"
+
+def production_data():
+    query = "select * from Production;"
+    data = pd.read_sql(query, engine)
+    return data
+
+def store_data():
+    query = "select * from store;"
+    data = pd.read_sql(query, engine)
+    return data

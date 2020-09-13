@@ -163,5 +163,21 @@ def updateconfigparams():
     updateconfig = data_storage.updateconfig(productname,productcode,duration)
     return updateconfig
 
+@app.route('/get/productiondata', methods = ['GET', 'POST'])
+def productiondata():
+    data = data_storage.production_data()
+    data = data.to_json(orient="split")
+    data = json.loads(data)
+    data = json.dumps(data)
+    return data
+
+@app.route('/get/storedata', methods = ['GET', 'POST'])
+def storedata():
+    data = data_storage.store_data()
+    data = data.to_json(orient="split")
+    data = json.loads(data)
+    data = json.dumps(data)
+    return data
+
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=9001)
