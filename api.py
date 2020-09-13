@@ -72,6 +72,8 @@ def getusers():
 def createcoolingmain():
     data = request.json
     print(data)
+    confsdata = data_storage.configparams()
+    print(confsdata)
     date = data['date']
     trolley = data['trolleyNo']
     product = data['product']
@@ -79,8 +81,10 @@ def createcoolingmain():
     quant = data['quantity']
     timein = data['coolingTime']
     u_key = data['u_key']
-    duration = data['duration']
-    completetime = data['completetime']
+    productcode = confsdata.loc[(confsdata['productname']==product),'productcode'].iloc[0]
+    duration = confsdata.loc[(confsdata['productcode']==productcode),'duration'].iloc[0]
+    duration = duration + timein
+    completetime = duration + timein
     updatedata = data_storage.create_cooling_main(date,trolley,product,shftnumber,quant,timein,u_key,duration,completetime)
     return updatedata
 
