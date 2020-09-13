@@ -81,10 +81,14 @@ def createcoolingmain():
     quant = data['quantity']
     timein = data['coolingTime']
     u_key = data['u_key']
-    productcode = confsdata.loc[(confsdata['productname']==product),'productcode'].iloc[0]
-    duration = confsdata.loc[(confsdata['productcode']==productcode),'duration'].iloc[0]
-    duration = duration + timein
+    #productcode = confsdata.loc[(confsdata['productname']==product),'productcode'].iloc[0]
+    duration = confsdata.loc[(confsdata['productcode']==product),'duration'].iloc[0]
+    #duration = duration + timein
     completetime = duration + timein
+    completetime = str(completetime).split()
+    completetime = completetime[2]
+    duration = str(duration).split()
+    duration = duration[2]
     updatedata = data_storage.create_cooling_main(date,trolley,product,shftnumber,quant,timein,u_key,duration,completetime)
     return updatedata
 
@@ -162,4 +166,4 @@ def updateconfigparams():
     return updateconfig
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0', port=9002)
+    socketio.run(app, debug=True, host='0.0.0.0', port=9001)
