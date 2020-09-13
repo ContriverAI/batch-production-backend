@@ -73,3 +73,12 @@ def configparams():
     query = "select * from configparams;"
     data = pd.read_sql(query, engine)
     return data
+
+def updateconfig(productname,productcode,duration):
+    try:
+        query = "update configparams set productname = '"+productname+"', duration = '"+duration+"' where productcode = '"+productcode+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Successfully Updated Duration"
+    except:
+        return  "Something Went Wrong..!"

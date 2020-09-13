@@ -75,9 +75,9 @@ def createcoolingmain():
     date = data['date']
     trolley = data['trolleyNo']
     product = data['product']
-    shftnumber = data['shiftnumber']
+    shftnumber = data['shiftProduced']
     quant = data['quantity']
-    timein = data['timein']
+    timein = data['coolingTime']
     u_key = data['u_key']
     duration = data['duration']
     completetime = data['completetime']
@@ -147,6 +147,15 @@ def configparams():
     data = json.loads(data)
     data = json.dumps(data)
     return data
+
+@app.route('/get/updateconfigparams', methods = ['GET', 'POST'])
+def updateconfigparams():
+    data = request.json
+    productname = data['productName']
+    productcode = data['productCode']
+    duration = data['duration']
+    updateconfig = data_storage.updateconfig(productname,productcode,duration)
+    return updateconfig
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=9002)
