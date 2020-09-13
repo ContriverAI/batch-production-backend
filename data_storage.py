@@ -68,3 +68,8 @@ def delete_user(u_key):
         return "Successfully Deleted Record"
     else:
         return "Record Doesn't Exist"
+
+def configparams():
+    query = "select * from configparams;"
+    data = pd.read_sql(query, engine)
+    return data

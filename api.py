@@ -140,5 +140,13 @@ def allusers():
     data = json.dumps(data)
     return data
 
+@app.route('/get/configparams', methods = ['GET', 'POST'])
+def configparams():
+    data = data_storage.configparams()
+    data = data.to_json(orient="split")
+    data = json.loads(data)
+    data = json.dumps(data)
+    return data
+
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=9002)
