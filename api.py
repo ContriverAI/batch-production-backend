@@ -21,7 +21,20 @@ def getcoolingdata(socketio):
     coolingdata = coolingdata.to_json(orient="split")
     coolingdata = json.loads(coolingdata)
     coolingdata = json.dumps(coolingdata)
-    socketio.emit('data',coolingdata)
+    proddata = data_storage.production_data()
+    proddata = proddata.to_json(orient="split")
+    proddata = json.loads(proddata)
+    proddata = json.dumps(proddata)
+    storedata = data_storage.store_data()
+    storedata = storedata.to_json(orient="split")
+    storedata = json.loads(storedata)
+    storedata = json.dumps(storedata)
+    data = {
+        "cooling":coolingdata,
+        "proddata":proddata,
+        "store":storedata
+    }
+    socketio.emit('data',data)
 
 def bg_thread_cooling_data():
     while True:
