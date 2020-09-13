@@ -5,9 +5,39 @@ import data_storage
 from flask_cors import CORS
 import uuid
 import json
+from flask_socketio import SocketIO, emit, disconnect
+import socket
+from threading import Lock, Timer
 
 app = Flask(__name__)
-CORS(app)
+app.config['SECRET_KEY'] = 'secret!'
+async_mode = "threading"
+socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
+thread = None
+thread_lock = Lock()
+
+def getcoolingdata(socketio):
+    coolingdata = data_storage.cooling()
+    coolingdata = coolingdata.to_json(orient="split")
+    coolingdata = json.loads(coolingdata)
+    coolingdata = json.dumps(coolingdata)
+    socketio.emit('data',coolingdata)
+
+def bg_thread_cooling_data():
+    while True:
+        getcoolingdata(socketio)
+
+@socketio.on('connect')
+def test_connect():
+    global thread
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(bg_thread_cooling_data)
+    emit('conn', {'data': 'Connected'})
+
+@app.route('/', methods = ['GET', 'POST'])
+def y():
+    return render_template('sample.html')
 
 @app.route('/get/users', methods = ['GET', 'POST'])
 def getusers():
@@ -38,15 +68,6 @@ def getusers():
         a = {"msg":"Something Went Wrong..!"}
         return jsonify(a)
 
-@app.route('/get/cooling_data', methods = ['GET', 'POST'])
-def getcoolingdata():
-    data = request.json
-    coolingdata = data_storage.cooling()
-    coolingdata = coolingdata.to_json(orient="split")
-    coolingdata = json.loads(coolingdata)
-    coolingdata = json.dumps(coolingdata)
-    return coolingdata
-
 @app.route('/get/create_cooling_main', methods = ['GET', 'POST'])
 def createcoolingmain():
     data = request.json
@@ -54,11 +75,13 @@ def createcoolingmain():
     date = data['date']
     trolley = data['trolleyNo']
     product = data['product']
-    shftprod = data['shiftProduced']
+    shftnumber = data['shiftnumber']
     quant = data['quantity']
-    coolingtime = data['coolingTime']
+    timein = data['timein']
     u_key = data['u_key']
-    updatedata = data_storage.create_cooling_main(date,trolley,product,shftprod,quant,coolingtime,u_key)
+    duration = data['duration']
+    completetime = data['completetime']
+    updatedata = data_storage.create_cooling_main(date,trolley,product,shftnumber,quant,timein,u_key,duration,completetime)
     return updatedata
 
 @app.route('/get/create_cooling_packaging', methods = ['GET', 'POST'])
@@ -117,4 +140,5 @@ def allusers():
     data = json.dumps(data)
     return data
 
-app.run(host='0.0.0.0', port=9001)
+if __name__ == '__main__':
+    socketio.run(app, debug=True, host='0.0.0.0', port=9002)

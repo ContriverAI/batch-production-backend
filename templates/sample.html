@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js"></script>
+        <script>
+            const socket = io('http://localhost:9002/');
+        socket.on('conn', data => {
+            console.log("CONNECTION RESPONSE: ", data)
+            socket.emit('getData', () => { })
+        })
+        socket.on('data', function (data) {
+            try {
+                console.log(data);
+            } catch (err) {
+                console.error(err)
+            }
+        });
+        </script>
+    </head>
+</html>

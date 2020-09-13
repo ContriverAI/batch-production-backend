@@ -8,7 +8,7 @@ df = pd.read_csv('/home/dev/Desktop/c.csv')
 print(df.columns)
 
 def qq(DATE,TROLLEY,PRODUCT,QTY,TIME,DURATION,COMPLETE,PACKAGING,u_key):
-    query = "insert into Cooling values('"+DATE+"','"+str(TROLLEY)+"','"+PRODUCT+"','"+str(QTY)+"','"+TIME+"','"+DURATION+"','"+COMPLETE+"','"+PACKAGING+"','"+u_key+"');"
+    query = "insert into Cooling values('"+DATE+"','"+str(TROLLEY)+"','"+PRODUCT+"','"+str(QTY)+"','"+TIME+"','"+DURATION+"','"+COMPLETE+"','"+PACKAGING+"','"+u_key+"','1','Not Done');"
     with engine.begin() as conn:
         conn.execute(query)
     print(query)
