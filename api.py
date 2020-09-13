@@ -81,9 +81,7 @@ def createcoolingmain():
     quant = data['quantity']
     timein = data['coolingTime']
     u_key = data['u_key']
-    #productcode = confsdata.loc[(confsdata['productname']==product),'productcode'].iloc[0]
     duration = confsdata.loc[(confsdata['productcode']==product),'duration'].iloc[0]
-    #duration = duration + timein
     completetime = duration + timein
     completetime = str(completetime).split()
     completetime = completetime[2]

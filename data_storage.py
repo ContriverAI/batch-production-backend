@@ -14,10 +14,16 @@ def cooling():
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
     #try:
-    query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done');"
-    with engine.begin() as conn:
-        conn.execute(query)
-    return "Record Added Successfully..!"
+    query = "select * from cooling;"
+    df = pd.read_sql(query,engine)
+    index_num = list(np.where((df['trolley']==trolley))[0])
+    if len(index_num)>0:
+        return 'Trolley Already Exists'
+    else:
+        query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done');"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Record Added Successfully..!"
     #except:
     #    return "Something Went Wrong..!"
 
