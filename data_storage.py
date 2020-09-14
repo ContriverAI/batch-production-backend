@@ -101,10 +101,10 @@ def store_data():
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time):
     try:
-        query = "insert into Production values('"+Date+"','"+FLOUR+"','"+SHIFT+"','"+REMIX+"','"+YEAST+"',' ',' ',' ',' ',' ','"+Time+"',' ','"+u_key+"','"+Batch+"',' ','"+Yield_val+"',' ',' ');"
+        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"',' ',' ',' ',' ',' ','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
         with engine.begin() as conn:
             conn.execute(query)
-        query = "update Production set '"+Yield+"' = '"+Yield_val+"' where `Mixing Time` = '"+Time+"';"
+        query = "update Production set '"+str(Yield)+"' = '"+str(Yield_val)+"' where `Mixing Time` = '"+str(Time)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
@@ -113,7 +113,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,
 
 def prod_recall_screen(batch,time,cancel,u_key):
     try:
-        query = "update Production set `recall time` = '"+time+"', `batch recall` = '"+cancel+"' where batch = '"+batch+"' and u_key = '"+u_key+"';"
+        query = "update Production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"' where batch = '"+str(batch)+"' and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
@@ -122,7 +122,7 @@ def prod_recall_screen(batch,time,cancel,u_key):
 
 def bakescreen(batch,status,time,u_key):
     try:
-        query = "update Production set `Baking Time` = '"+time+"', status = '"+status+"' where batch = '"+batch+"' and u_key = '"+u_key+"';"
+        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"' where batch = '"+str(batch)+"' and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
@@ -131,7 +131,7 @@ def bakescreen(batch,status,time,u_key):
 
 def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,u_key):
     try:
-        query = "insert into store values('"+date+"','"+product+"','"+St_qty_recv+"','"+rough_qty_recv+"',' ',' ',' ',' ',' ','"+u_key+"','"+pkg_supervisor+"',' ');"
+        query = "insert into store values('"+str(date)+"','"+str(product)+"','"+str(St_qty_recv)+"','"+str(rough_qty_recv)+"',' ',' ',' ',' ',' ','"+str(u_key)+"','"+str(pkg_supervisor)+"',' ');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Record Added Successfully"
@@ -140,7 +140,7 @@ def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,
 
 def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key):
     try:
-        query = "update store set 'dispatched_date' = '"+date+"', `dispatched standard` = '"+std_dispatched+"', `dispatched rough` = '"+rough_dispatched+"', `rough returned` = '"+rough_returned+"', `dsp_supervisor` = '"+dsp_supervisor+"' where product = '"+product+"' and u_key = '"+u_key+"';"
+        query = "update store set 'dispatched_date' = '"+str(date)+"', `dispatched standard` = '"+str(std_dispatched)+"', `dispatched rough` = '"+str(rough_dispatched)+"', `rough returned` = '"+str(rough_returned)+"', `dsp_supervisor` = '"+str(dsp_supervisor)+"' where product = '"+str(product)+"' and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
