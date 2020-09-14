@@ -192,5 +192,68 @@ def storedata():
     data = json.dumps(data)
     return data
 
+@app.route('/get/production_main_screen', methods = ['GET', 'POST'])
+def prodmainscreen():
+    data = request.json
+    Date = data['date']
+    Batch = data['batch']
+    YEAST = data['yeast']
+    FLOUR = data['flour']
+    Yield = data['yield']
+    Yield_val = data['yield_val']
+    SHIFT = data['shift']
+    PRODUCT = data['product']
+    REMIX = data['remix']
+    WaterUsed = data['water']
+    Time = data['time']
+    u_key = data['u_key']
+    prodmain = data_storage.prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time)
+    return prodmain
+
+@app.route('/get/production_recall_screen', methods = ['GET', 'POST'])
+def prodcutionrecallscreen():
+    data = request.json
+    batch = data['batch']
+    time = data['time']
+    cancel = data['cancel']
+    u_key = data['u_key']
+    recallscreen = data_storage.prod_recall_screen(batch,time,cancel,u_key)
+    return recallscreen
+
+@app.route('/get/production_bake_screen', methods = ['GET', 'POST'])
+def prodbakescreen():
+    data = request.json
+    batch = data['batch']
+    status = data['status']
+    time = data['time']
+    u_key = data['u_key']
+    bakescreen = data_storage.bakescreen(batch,status,time,u_key)
+    return bakescreen
+
+@app.route('/get/store_receiving_screen', methods = ['GET', 'POST'])
+def storereceivingscreen():
+    data = request.json
+    date = data['date']
+    product = data['product']
+    St_qty_recv = data['standard_qty_recv']
+    rough_qty_recv = data['rough_qty_recv']
+    pkg_supervisor = data['supervisor']
+    u_key = data['u_key']
+    rcscreen = data_storage.storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,u_key)
+    return rcscreen
+
+@app.route('/get/store_dispatch_screen', methods = ['GET', 'POST'])
+def storedispatchscreen():
+    data = request.json
+    date = data['date']
+    product = data['product']
+    std_dispatched = data['std_dispatched']
+    rough_dispatched = data['rough_dispatched']
+    rough_returned = data['rough_returned']
+    dsp_supervisor = data['dsp_supervisor']
+    u_key = data['u_key']
+    storedspscreen = data_storage.store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key)
+    return storedspscreen
+
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=9001)

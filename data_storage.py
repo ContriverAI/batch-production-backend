@@ -14,7 +14,7 @@ def cooling():
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
     #try:
-    query = "select * from cooling;"
+    query = "select * from Cooling;"
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df['trolley']==trolley))[0])
     if len(index_num)>0:
@@ -98,3 +98,51 @@ def store_data():
     query = "select * from store;"
     data = pd.read_sql(query, engine)
     return data
+
+def prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time):
+    try:
+        query = "insert into Production values('"+Date+"','"+FLOUR+"','"+SHIFT+"','"+REMIX+"','"+YEAST+"',' ',' ',' ',' ',' ','"+Time+"',' ','"+u_key+"','"+Batch+"',' ','"+Yield_val+"',' ',' ');"
+        with engine.begin() as conn:
+            conn.execute(query)
+        query = "update Production set '"+Yield+"' = '"+Yield_val+"' where `Mixing Time` = '"+Time+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Successfully Record Added"
+    except:
+        return "Something Went Wrong"
+
+def prod_recall_screen(batch,time,cancel,u_key):
+    try:
+        query = "update Production set `recall time` = '"+time+"', `batch recall` = '"+cancel+"' where batch = '"+batch+"' and u_key = '"+u_key+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Updated Successfully"
+    except:
+        return "Something Went Wrong"
+
+def bakescreen(batch,status,time,u_key):
+    try:
+        query = "update Production set `Baking Time` = '"+time+"', status = '"+status+"' where batch = '"+batch+"' and u_key = '"+u_key+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Updated Successfully"
+    except:
+        return "Something Went Wrong"
+
+def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,u_key):
+    try:
+        query = "insert into store values('"+date+"','"+product+"','"+St_qty_recv+"','"+rough_qty_recv+"',' ',' ',' ',' ',' ','"+u_key+"','"+pkg_supervisor+"',' ');"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Record Added Successfully"
+    except:
+        return "Something Went Wrong"
+
+def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key):
+    try:
+        query = "update store set 'dispatched_date' = '"+date+"', `dispatched standard` = '"+std_dispatched+"', `dispatched rough` = '"+rough_dispatched+"', `rough returned` = '"+rough_returned+"', `dsp_supervisor` = '"+dsp_supervisor+"' where product = '"+product+"' and u_key = '"+u_key+"';"
+        with engine.begin() as conn:
+            conn.execute(query)
+        return "Updated Successfully"
+    except:
+        return "Something Went Wrong"
