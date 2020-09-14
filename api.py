@@ -8,6 +8,7 @@ import json
 from flask_socketio import SocketIO, emit, disconnect
 import socket
 from threading import Lock, Timer
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -39,6 +40,7 @@ def getcoolingdata(socketio):
 def bg_thread_cooling_data():
     while True:
         getcoolingdata(socketio)
+        time.sleep(10)
 
 @socketio.on('connect')
 def test_connect():
