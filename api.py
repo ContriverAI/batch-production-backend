@@ -2,13 +2,13 @@ from flask import Flask, url_for, request, render_template, jsonify
 import threading
 import pandas as pd
 import data_storage
-from flask_cors import CORS
 import uuid
 import json
 from flask_socketio import SocketIO, emit, disconnect
 import socket
 from threading import Lock, Timer
 import time
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -16,6 +16,7 @@ async_mode = "threading"
 socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
 thread = None
 thread_lock = Lock()
+CORS(app, support_credentials=True)
 
 def getcoolingdata(socketio):
     coolingdata = data_storage.cooling()
@@ -51,10 +52,12 @@ def test_connect():
     emit('conn', {'data': 'Connected'})
 
 @app.route('/', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def y():
     return render_template('sample.html')
 
-@app.route('/get/users', methods = ['GET', 'POST'])
+@app.route('/get/users', methods = ['GET', 'POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True)
 def getusers():
     data = request.json
     username = data['username']
@@ -84,6 +87,7 @@ def getusers():
         return jsonify(a)
 
 @app.route('/get/create_cooling_main', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def createcoolingmain():
     data = request.json
     print(data)
@@ -106,6 +110,7 @@ def createcoolingmain():
     return updatedata
 
 @app.route('/get/create_cooling_packaging', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def createcoolingpackaging():
     data = request.json
     print(data)
@@ -117,6 +122,7 @@ def createcoolingpackaging():
     return updatedata
 
 @app.route('/get/create_user', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def createuser():
     data = request.json
     username = data['username']
@@ -137,6 +143,7 @@ def createuser():
     return user
 
 @app.route('/get/update_user', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def updateuser():
     data = request.json
     username = data['username']
@@ -147,6 +154,7 @@ def updateuser():
     return user
 
 @app.route('/get/delete_user', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def deleteuser():
     data = request.json
     u_key = data['username']
@@ -154,6 +162,7 @@ def deleteuser():
     return user
 
 @app.route('/get/allusers', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def allusers():
     data = data_storage.get_users()
     data = data.to_json(orient="split")
@@ -162,6 +171,7 @@ def allusers():
     return data
 
 @app.route('/get/configparams', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def configparams():
     data = data_storage.configparams()
     data = data.to_json(orient="split")
@@ -170,6 +180,7 @@ def configparams():
     return data
 
 @app.route('/get/updateconfigparams', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def updateconfigparams():
     data = request.json
     productname = data['productName']
@@ -179,6 +190,7 @@ def updateconfigparams():
     return updateconfig
 
 @app.route('/get/productiondata', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def productiondata():
     data = data_storage.production_data()
     data = data.to_json(orient="split")
@@ -195,6 +207,7 @@ def storedata():
     return data
 
 @app.route('/get/production_main_screen', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def prodmainscreen():
     data = request.json
     Date = data['date']
@@ -213,6 +226,7 @@ def prodmainscreen():
     return prodmain
 
 @app.route('/get/production_recall_screen', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def prodcutionrecallscreen():
     data = request.json
     batch = data['batch']
@@ -223,6 +237,7 @@ def prodcutionrecallscreen():
     return recallscreen
 
 @app.route('/get/production_bake_screen', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def prodbakescreen():
     data = request.json
     batch = data['batch']
@@ -233,6 +248,7 @@ def prodbakescreen():
     return bakescreen
 
 @app.route('/get/store_receiving_screen', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def storereceivingscreen():
     data = request.json
     date = data['date']
@@ -245,6 +261,7 @@ def storereceivingscreen():
     return rcscreen
 
 @app.route('/get/store_dispatch_screen', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def storedispatchscreen():
     data = request.json
     date = data['date']
