@@ -13,19 +13,19 @@ def cooling():
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
-    #try:
-    query = "select * from Cooling;"
-    df = pd.read_sql(query,engine)
-    index_num = list(np.where((df['trolley']==trolley))[0])
-    if len(index_num)>0:
-        return 'Trolley Already Exists'
-    else:
-        query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done');"
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully..!"
-    #except:
-    #    return "Something Went Wrong..!"
+    try:
+        query = "select * from Cooling;"
+        df = pd.read_sql(query,engine)
+        index_num = list(np.where((df['trolley']==trolley))[0])
+        if len(index_num)>0:
+            return 'Trolley Already Exists'
+        else:
+            query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done');"
+            with engine.begin() as conn:
+                conn.execute(query)
+            return "Record Added Successfully..!"
+    except:
+        return "Something Went Wrong..!"
 
 def create_cooling_packaging(u_key,trolley,status,time):
     try:
@@ -101,10 +101,11 @@ def store_data():
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time):
     try:
-        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"',' ',' ',' ',' ',' ','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
+        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','0','0','0','0','0','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
         with engine.begin() as conn:
             conn.execute(query)
-        query = "update Production set '"+str(Yield)+"' = '"+str(Yield_val)+"' where `Mixing Time` = '"+str(Time)+"';"
+        query = "update Production set "+Yield+" = "+str(Yield_val)+" where `Mixing Time` = '"+str(Time)+"';"
+        print(query)
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
@@ -131,7 +132,7 @@ def bakescreen(batch,status,time,u_key):
 
 def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,u_key):
     try:
-        query = "insert into store values('"+str(date)+"','"+str(product)+"','"+str(St_qty_recv)+"','"+str(rough_qty_recv)+"',' ',' ',' ',' ',' ','"+str(u_key)+"','"+str(pkg_supervisor)+"',' ');"
+        query = "insert into store values('"+str(date)+"','"+str(product)+"','"+str(St_qty_recv)+"','"+str(rough_qty_recv)+"','0','0','0','0','0','"+str(u_key)+"','"+str(pkg_supervisor)+"','"+date+"',' ');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Record Added Successfully"
@@ -140,7 +141,7 @@ def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,
 
 def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key):
     try:
-        query = "update store set 'dispatched_date' = '"+str(date)+"', `dispatched standard` = '"+str(std_dispatched)+"', `dispatched rough` = '"+str(rough_dispatched)+"', `rough returned` = '"+str(rough_returned)+"', `dsp_supervisor` = '"+str(dsp_supervisor)+"' where product = '"+str(product)+"' and u_key = '"+str(u_key)+"';"
+        query = "update store set dispatched_date = '"+str(date)+"', `dispatched standard` = '"+str(std_dispatched)+"', `dispatched rough` = '"+str(rough_dispatched)+"', `rough returned bread` = '"+str(rough_returned)+"', `dsp_supervisor` = '"+str(dsp_supervisor)+"' where product = '"+str(product)+"' and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
