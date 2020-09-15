@@ -97,18 +97,35 @@ def production_data():
 def store_data():
     query = "select * from store;"
     data = pd.read_sql(query, engine)
-    return data
+    return data 
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time):
     try:
-        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','0','0','0','0','0','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
-        with engine.begin() as conn:
-            conn.execute(query)
-        query = "update Production set "+Yield+" = "+str(Yield_val)+" where `Mixing Time` = '"+str(Time)+"';"
-        print(query)
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Successfully Record Added"
+        query = "select * from Production;"
+        df = pd.read_sql(query, engine)
+        index_num = list(np.where((df['batch']==Batch))[0])
+        if len(index_num)>0:
+            index_num = list(np.where((df['status']=='Unbaked'))[0])
+            if len(index_num)>0:
+                return "Batch Already Exists With Unbaked Status..!"
+            else:
+                query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','0','0','0','0','0','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
+                with engine.begin() as conn:
+                    conn.execute(query)
+                query = "update Production set "+Yield+" = "+str(Yield_val)+" where `Mixing Time` = '"+str(Time)+"';"
+                print(query)
+                with engine.begin() as conn:
+                    conn.execute(query)
+                return "Successfully Record Added"
+        else:
+            query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','0','0','0','0','0','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ');"
+            with engine.begin() as conn:
+                conn.execute(query)
+            query = "update Production set "+Yield+" = "+str(Yield_val)+" where `Mixing Time` = '"+str(Time)+"';"
+            print(query)
+            with engine.begin() as conn:
+                conn.execute(query)
+            return "Successfully Record Added"
     except:
         return "Something Went Wrong"
 
