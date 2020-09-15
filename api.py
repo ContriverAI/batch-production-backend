@@ -44,12 +44,14 @@ def bg_thread_cooling_data():
         time.sleep(10)
 
 @socketio.on('connect')
+@cross_origin(supports_credentials=True)
 def test_connect():
     global thread
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(bg_thread_cooling_data)
     emit('conn', {'data': 'Connected'})
+    return "emitted"
 
 @app.route('/', methods = ['GET', 'POST'])
 @cross_origin(supports_credentials=True)
