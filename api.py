@@ -58,7 +58,7 @@ def test_connect():
 def y():
     return render_template('sample.html')
 
-@app.route('/get/users', methods = ['GET', 'POST', 'OPTIONS'])
+@app.route('/get/users', methods = ['GET', 'POST'])
 @cross_origin(supports_credentials=True)
 def getusers():
     data = request.json
