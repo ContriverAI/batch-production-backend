@@ -216,15 +216,13 @@ def prodmainscreen():
     Batch = data['batch']
     YEAST = data['yeast']
     FLOUR = data['flour']
-    Yield = data['yield']
     Yield_val = data['yield_val']
     SHIFT = data['shift']
     PRODUCT = data['product']
     REMIX = data['remix']
-    WaterUsed = data['water']
     Time = data['time']
     u_key = data['u_key']
-    prodmain = data_storage.prod_main_Screen(Date,Batch,YEAST,FLOUR,Yield,u_key,Yield_val,SHIFT,PRODUCT,REMIX,WaterUsed,Time)
+    prodmain = data_storage.prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,PRODUCT)
     return prodmain
 
 @app.route('/get/production_recall_screen', methods = ['GET', 'POST'])
