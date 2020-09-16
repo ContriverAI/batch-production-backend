@@ -41,7 +41,6 @@ def getcoolingdata(socketio):
 def bg_thread_cooling_data():
     while True:
         getcoolingdata(socketio)
-        time.sleep(10)
 
 @socketio.on('connect')
 @cross_origin(supports_credentials=True)

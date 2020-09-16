@@ -29,7 +29,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
 
 def create_cooling_packaging(u_key,trolley,status,time):
     try:
-        query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"' where u_key = '"+u_key+"' and trolley = '"+str(trolley)+"';"
+        query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"' where u_key = '"+u_key+"' and trolley = "+str(trolley)+";"
         with engine.begin() as conn:
             conn.execute(query)
         return "Record Added Successfully..!"
