@@ -36,4 +36,4 @@ def cooling_update():
                 newtime = str(tdelts)
             x = threading.Thread(target=df_bg_cooling, args=(tr,newtime,))
             x.start()
-        print("cooling updated with complete time")
+#        print("cooling updated with complete time")
