@@ -20,7 +20,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
         if len(index_num)>0:
             return 'Trolley Already Exists'
         else:
-            query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done');"
+            query = "insert into Cooling values('"+date+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done','00:00:00');"
             with engine.begin() as conn:
                 conn.execute(query)
             return "Record Added Successfully..!"
