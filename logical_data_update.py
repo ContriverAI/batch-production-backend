@@ -15,7 +15,7 @@ def df_bg_cooling(tr,rt):
 
 def cooling_update():
     while(True):
-        query = "select * from Cooling where `packaging complete` = 'No' and trolley = 101;"
+        query = "select * from Cooling where `packaging complete` = 'No';"
         df = pd.read_sql(query,engine)
         for i in range(0,len(df)):
             tr = df['trolley'][i]
