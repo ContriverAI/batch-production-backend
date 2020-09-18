@@ -111,7 +111,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ','"+product+"');"
+                query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
@@ -120,12 +120,12 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ','"+product+"');"
+                query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
     else:
-        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"',' ','"+str(Yield_val)+"',' ',' ','"+product+"');"
+        query = "insert into Production values('"+str(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
@@ -146,7 +146,7 @@ def bakescreen(batch,status,time,u_key):
         query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"' where batch = "+str(batch)+" and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
-        return "Updated Successfully"
+        return "Successfully Updated Batch"
     except:
         return "Something Went Wrong"
 
