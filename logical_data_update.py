@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def df_bg_cooling(tr,rt):
-    query = "update Cooling set `remaining time` = '"+str(rt)+"' where trolley = "+str(tr)+";"
+    query = "update Cooling set `remaining time` = '"+str(rt)+"' where trolley = "+str(tr)+" and `packaging complete` = 'No';"
     with engine.begin() as conn:
         conn.execute(query)
 
@@ -33,7 +33,7 @@ def cooling_update():
             tdelta = datetime.strptime(t1, FMT) - datetime.strptime(crnttime, FMT)
             print("--tdelta--------{}----------".format(tdelta))
             print("--tdelta seconds--------{}----------".format(tdelta.seconds))
-            if tdelta.seconds == 0 or tdelta.seconds > 20060:
+            if tdelta.seconds == 0 or tdelta.seconds > 5060:
                 newtime = "00:00:00"
                 print("--newtime--------{}----------".format(newtime))
             else:
