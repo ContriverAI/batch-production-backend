@@ -16,7 +16,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
     try:
         query = "select * from Cooling;"
         df = pd.read_sql(query,engine)
-        index_num = list(np.where((df['trolley']==trolley))[0])
+        index_num = list(np.where((df['trolley']==int(trolley)))[0])
         if len(index_num)>0:
             return 'Trolley Already Exists'
         else:
@@ -143,7 +143,7 @@ def prod_recall_screen(batch,time,cancel,u_key):
 
 def bakescreen(batch,status,time,u_key):
     try:
-        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"' where batch = '"+str(batch)+"' and u_key = '"+str(u_key)+"';"
+        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"' where batch = "+str(batch)+" and u_key = '"+str(u_key)+"';"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
