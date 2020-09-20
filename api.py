@@ -379,6 +379,8 @@ def prodreport():
         report = json.dumps(report)
         return report
 
+
+
 if __name__ == '__main__':
     y = threading.Thread(target=logical_data_update.cooling_update)
     y.start()

@@ -189,11 +189,14 @@ def coolingreportp1pk0(dateto,datefrom,product,pkgcomplete):
     return df
 
 def storereport(dateto,datefrom,product):
-    query = ""
-    return "done"
+    query = "select date_time,product,sum(`qty received standard`),sum(`qty received rough`), sum(`dispatched standard`), sum(`dispatched rough`), sum(`rough returned`), sum(`bread in store`), sum(`rough bread in store`), pkg_supervisor, dsp_supervisor group by date_time,product,pkg_supervisor,dsp_supervisor having (date_time between '"+datefrom+"' and '"+dateto+"') and product in "+str(tuple(product))+";"
+    df = pd.read_sql(query, engine)
+    return df
 
 def storereportp1(dateto,datefrom,product):
-    query = ""
+    query = "select date_time,product,sum(`qty received standard`),sum(`qty received rough`), sum(`dispatched standard`), sum(`dispatched rough`), sum(`rough returned`), sum(`bread in store`), sum(`rough bread in store`), pkg_supervisor, dsp_supervisor group by date_time,product,pkg_supervisor,dsp_supervisor having (date_time between '"+datefrom+"' and '"+dateto+"') and product = '"+product+"';"
+    df = pd.read_sql(query, engine)
+    return df
 
 def prodreport(dateto,datefrom,status,product):
     query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+str(tuple(status))+" and product in "+str(tuple(product))+";"
