@@ -185,10 +185,9 @@ def configparams():
 @cross_origin(supports_credentials=True)
 def updateconfigparams():
     data = request.json
-    productname = data['productName']
     productcode = data['productCode']
     duration = data['duration']
-    updateconfig = data_storage.updateconfig(productname,productcode,duration)
+    updateconfig = data_storage.updateconfig(productcode,duration)
     return updateconfig
 
 @app.route('/get/productiondata', methods = ['GET', 'POST'])
@@ -274,7 +273,113 @@ def storedispatchscreen():
     storedspscreen = data_storage.store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key)
     return storedspscreen
 
+@app.route('/get/coolingreport', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
+def coolingreport():
+    p1 = 0
+    pk1 = 0
+    data = request.json
+    dateto = data['date_to']
+    datefrom = data['date_from']
+    product = data['product']
+    pkgcomplete = data['packaging']
+    if len(product)<2:
+        product = product[0]
+        p1 = 1
+    if len(pkgcomplete)<2:
+        pkgcomplete = pkgcomplete[0]
+        pk1 = 1
+    if (p1 == 0 and pk1 == 0):
+        report = data_storage.coolingreport(dateto,datefrom,product,pkgcomplete)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (p1 == 1 and pk1 == 1):
+        report = data_storage.coolingreportp1pk1(dateto,datefrom,product,pkgcomplete)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (p1 == 0 and pk1 == 1):
+        report = data_storage.coolingreportp0pk1(dateto,datefrom,product,pkgcomplete)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (p1 == 1 and pk1 == 0):
+        report = data_storage.coolingreportp1pk0(dateto,datefrom,product,pkgcomplete)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+
+@app.route('/get/storereport', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
+def storereport():
+    p1 = 0
+    data = request.json
+    dateto = data['date_to']
+    datefrom = data['date_from']
+    product = data['product']
+    if (len(product))<2:
+        product = product[0]
+        p1 = 1
+    if (p1 == 0):
+        report = data_storage.storereport(dateto,datefrom,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    else:
+        report = data_storage.storereportp1(dateto,datefrom,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+
+@app.route('/get/productionreport', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
+def prodreport():
+    p1 = 0
+    s1 = 0
+    data = request.json
+    dateto = data['date_to']
+    datefrom = data['date_from']
+    status = data['status']
+    product = data['product']
+    if (len(status)<2):
+        status = status[0]
+        s1 = 1
+    if (len(product)<2):
+        product = product[0]
+        p1 = 1
+    if (s1 == 0 and p1 == 0):
+        report = data_storage.prodreport(dateto,datefrom,status,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (s1 == 0 and p1 == 1):
+        report = data_storage.prodreports0p1(dateto,datefrom,status,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (s1 == 1 and p1 == 0):
+        report = data_storage.prodreports1p0(dateto,datefrom,status,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+    elif (s1 == 1 and p1 == 1):
+        report = data_storage.prodreports1p1(dateto,datefrom,status,product)
+        report = report.to_json(orient="split")
+        report = json.loads(report)
+        report = json.dumps(report)
+        return report
+
 if __name__ == '__main__':
     y = threading.Thread(target=logical_data_update.cooling_update)
     y.start()
-    socketio.run(app, debug=True, host='0.0.0.0', port=9001)
+    socketio.run(app, debug=True, host='0.0.0.0', port=9003)
