@@ -34,13 +34,14 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
     #    return "Something Went Wrong..!"
 
 def create_cooling_packaging(u_key,trolley,status,time):
-    try:
-        query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"' where u_key = '"+u_key+"' and trolley = "+str(trolley)+";"
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully..!"
-    except:
-        return "Something Went Wrong..!"
+    # try:
+    query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where and trolley = "+str(trolley)+" and date_time = curdate();"
+    print(query)
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Record Updated Successfully..!"
+    # except:
+        # return "Something Went Wrong..!"
         
 def u_key():
     data = pd.read_sql("select u_key from users;", engine)
@@ -107,7 +108,7 @@ def store_data():
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,product):
     #try:
-    query = "select * from Production;"
+    query = "select * from Production where date_time = curdate();"
     df = pd.read_sql(query, engine)
     index_num = list(np.where((df['batch']==Batch))[0])
     shift = list(np.where((df['shift']==SHIFT))[0])
@@ -140,7 +141,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
 
 def prod_recall_screen(batch,time,cancel,u_key):
     try:
-        query = "update Production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"' where batch = '"+str(batch)+"' and u_key = '"+str(u_key)+"';"
+        query = "update Production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = curdate();"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
@@ -149,7 +150,7 @@ def prod_recall_screen(batch,time,cancel,u_key):
 
 def bakescreen(batch,status,time,u_key):
     try:
-        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"' where batch = "+str(batch)+" and u_key = '"+str(u_key)+"';"
+        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = curdate();"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Updated Batch"
