@@ -35,7 +35,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
 
 def create_cooling_packaging(u_key,trolley,status,time):
     # try:
-    query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where and trolley = "+str(trolley)+" and date_time = curdate();"
+    query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where trolley = "+str(trolley)+" and date_time = curdate();"
     print(query)
     with engine.begin() as conn:
         conn.execute(query)
