@@ -224,3 +224,21 @@ def prodreports1p1(dateto,datefrom,status,product):
     query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status = '"+status+"' and product = '"+product+"';"
     df = pd.read_sql(query, engine)
     return df
+
+def get_cooling_report(dateto, datefrom, product, pkgcomplete):
+    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+pkgcomplete+" and product in "+product+";"
+    print("hellolo",query)
+    df = pd.read_sql(query, engine)
+    return df
+
+def get_prod_report(dateto,datefrom,status,product):
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+status+" and product in "+product+";"
+    print("hellolo",query)
+    df = pd.read_sql(query, engine)
+    return df
+
+def get_store_report(dateto,datefrom,product):
+    query = "select date_time,product,sum(`qty received standard`),sum(`qty received rough`), sum(`dispatched standard`), sum(`dispatched rough`), sum(`rough returned bread`), sum(`bread in store`), sum(`rough bread in store`), pkg_supervisor, dsp_supervisor from store group by date_time,product,pkg_supervisor,dsp_supervisor having (date_time between '"+datefrom+"' and '"+dateto+"') and product in "+product+";"
+    print("hellolo",query)
+    df = pd.read_sql(query, engine)
+    return df
