@@ -418,6 +418,8 @@ def prodreport():
     datefrom = data['date_from']
     status = data['status']
     product = data['product']
+    recall = data['recallStatus']
+    shift = data["shift"]
     if (len(status)<2):
         status = softner(status)
     else:
@@ -426,7 +428,15 @@ def prodreport():
         product = softner(product)
     else:
         product = softner_v2(product)
-    report = data_storage.get_prod_report(dateto,datefrom,status,product)
+    if (len(recall)<2):
+        recall = softner(recall)
+    else:
+        recall = softner_v2(recall)
+    if (len(shift)<2):
+        shift = softner(shift)
+    else:
+        shift = softner_v2(shift)
+    report = data_storage.get_prod_report(dateto,datefrom,status,product,recall,shift)
     report = report.to_json(orient="split")
     report = json.loads(report)
     report = json.dumps(report)

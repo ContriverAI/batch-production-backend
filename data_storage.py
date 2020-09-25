@@ -231,8 +231,8 @@ def get_cooling_report(dateto, datefrom, product, pkgcomplete):
     df = pd.read_sql(query, engine)
     return df
 
-def get_prod_report(dateto,datefrom,status,product):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+status+" and product in "+product+";"
+def get_prod_report(dateto,datefrom,status,product,recall,shift):
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+status+" and product in "+product+" and `batch recall` in "+recall+" and shift in "+shift+";"
     print("hellolo",query)
     df = pd.read_sql(query, engine)
     return df
