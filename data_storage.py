@@ -14,12 +14,12 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from Cooling  order by `remaining time` asc;", engine)
+    data = pd.read_sql("select * from Cooling where date_time = curdate() order by `remaining time` asc;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
     #try:
-    query = "select * from Cooling;"
+    query = "select * from Cooling where date_time = curdate();;"
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df['trolley']==int(trolley)))[0])
     if len(index_num)>0:
@@ -97,12 +97,12 @@ def updateconfig(productcode,duration):
         return  "Something Went Wrong..!"
 
 def production_data():
-    query = "select * from Production;"
+    query = "select * from Production where date_time = curdate();;"
     data = pd.read_sql(query, engine)
     return data
 
 def store_data():
-    query = "select * from store;"
+    query = "select * from store where date_time = curdate();;"
     data = pd.read_sql(query, engine)
     return data 
 
@@ -168,7 +168,7 @@ def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,
 
 def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key):
     try:
-        query = "update store set dispatched_date = '"+convert_to_date(date)+"', `dispatched standard` = '"+str(std_dispatched)+"', `dispatched rough` = '"+str(rough_dispatched)+"', `rough returned bread` = '"+str(rough_returned)+"', `dsp_supervisor` = '"+str(dsp_supervisor)+"' where product = '"+str(product)+"' and u_key = '"+str(u_key)+"';"
+        query = "update store set dispatched_date = '"+convert_to_date(date)+"', `dispatched standard` = '"+str(std_dispatched)+"', `dispatched rough` = '"+str(rough_dispatched)+"', `rough returned bread` = '"+str(rough_returned)+"', `dsp_supervisor` = '"+str(dsp_supervisor)+"' where product = '"+str(product)+"' and date_time = curdate();"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
