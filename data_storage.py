@@ -118,7 +118,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
+                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
@@ -127,12 +127,12 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
+                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
     else:
-        query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"',' ',' ','"+product+"');"
+        query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
