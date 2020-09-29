@@ -14,18 +14,18 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from Cooling where date_time = curdate() order by `remaining time` asc;", engine)
+    data = pd.read_sql("select * from cooling where date_time = curdate() order by `remaining time` asc;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
     #try:
-    query = "select * from Cooling where date_time = curdate();;"
+    query = "select * from cooling where date_time = curdate();;"
     df = pd.read_sql(query,engine)
     index_num = list(np.where((df['trolley']==int(trolley)))[0])
     if len(index_num)>0:
         return 'Trolley Already Exists'
     else:
-        query = "insert into Cooling values('"+convert_to_date(date)+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done','00:00:00');"
+        query = "insert into cooling values('"+convert_to_date(date)+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done','00:00:00');"
         print(query)
         with engine.begin() as conn:
             conn.execute(query)
@@ -35,7 +35,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
 
 def create_cooling_packaging(u_key,trolley,status,time):
     # try:
-    query = "update Cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where trolley = "+str(trolley)+" and date_time = curdate();"
+    query = "update cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where trolley = "+str(trolley)+" and date_time = curdate();"
     print(query)
     with engine.begin() as conn:
         conn.execute(query)
@@ -97,7 +97,7 @@ def updateconfig(productcode,duration):
         return  "Something Went Wrong..!"
 
 def production_data():
-    query = "select * from Production where date_time = curdate();;"
+    query = "select * from production where date_time = curdate();;"
     data = pd.read_sql(query, engine)
     return data
 
@@ -108,7 +108,7 @@ def store_data():
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,product):
     #try:
-    query = "select * from Production where date_time = curdate();"
+    query = "select * from production where date_time = curdate();"
     df = pd.read_sql(query, engine)
     index_num = list(np.where((df['batch']==Batch))[0])
     shift = list(np.where((df['shift']==SHIFT))[0])
@@ -118,7 +118,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
+                query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
@@ -127,12 +127,12 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             if len(index_num)>0:
                 return "Batch & Shift Already Exists With Unbaked Status..!"
             else:
-                query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
+                query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
                 with engine.begin() as conn:
                     conn.execute(query)
                 return "Successfully Record Added"
     else:
-        query = "insert into Production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
+        query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
@@ -141,7 +141,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
 
 def prod_recall_screen(batch,time,cancel,u_key):
     try:
-        query = "update Production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = curdate();"
+        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = curdate();"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
@@ -150,7 +150,7 @@ def prod_recall_screen(batch,time,cancel,u_key):
 
 def bakescreen(batch,status,time,u_key):
     try:
-        query = "update Production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = curdate();"
+        query = "update production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = curdate();"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Updated Batch"
@@ -176,22 +176,22 @@ def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_r
         return "Something Went Wrong"
 
 def coolingreport(dateto,datefrom,product,pkgcomplete):
-    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+str(tuple(pkgcomplete))+" and product in "+str(tuple(product))+";"
+    query = "select `date_time`,product,sum(qty),`packaging complete` from cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+str(tuple(pkgcomplete))+" and product in "+str(tuple(product))+";"
     df = pd.read_sql(query, engine)
     return df
 
 def coolingreportp1pk1(dateto,datefrom,product,pkgcomplete):
-    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` ='"+pkgcomplete+"' and product = '"+product+"';"
+    query = "select `date_time`,product,sum(qty),`packaging complete` from cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` ='"+pkgcomplete+"' and product = '"+product+"';"
     df = pd.read_sql(query, engine)
     return df
 
 def coolingreportp0pk1(dateto,datefrom,product,pkgcomplete):
-    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in ('"+str(pkgcomplete)+"') and product in "+str(tuple(product))+";"
+    query = "select `date_time`,product,sum(qty),`packaging complete` from cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in ('"+str(pkgcomplete)+"') and product in "+str(tuple(product))+";"
     df = pd.read_sql(query, engine)
     return df
 
 def coolingreportp1pk0(dateto,datefrom,product,pkgcomplete):
-    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+str(tuple(pkgcomplete))+" and product = '"+product+"';"
+    query = "select `date_time`,product,sum(qty),`packaging complete` from cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+str(tuple(pkgcomplete))+" and product = '"+product+"';"
     df = pd.read_sql(query, engine)
     return df
 
@@ -206,33 +206,33 @@ def storereportp1(dateto,datefrom,product):
     return df
 
 def prodreport(dateto,datefrom,status,product):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+str(tuple(status))+" and product in "+str(tuple(product))+";"
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+str(tuple(status))+" and product in "+str(tuple(product))+";"
     df = pd.read_sql(query, engine)
     return df
 
 def prodreports0p1(dateto,datefrom,status,product):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+str(tuple(status))+" and product = '"+product+"';"
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+str(tuple(status))+" and product = '"+product+"';"
     df = pd.read_sql(query, engine)
     return df
 
 def prodreports1p0(dateto,datefrom,status,product):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status = '"+status+"' and product in "+str(tuple(product))+";"
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status = '"+status+"' and product in "+str(tuple(product))+";"
     df = pd.read_sql(query, engine)
     return df
 
 def prodreports1p1(dateto,datefrom,status,product):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status = '"+status+"' and product = '"+product+"';"
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status = '"+status+"' and product = '"+product+"';"
     df = pd.read_sql(query, engine)
     return df
 
 def get_cooling_report(dateto, datefrom, product, pkgcomplete):
-    query = "select `date_time`,product,sum(qty),`packaging complete` from Cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+pkgcomplete+" and product in "+product+";"
+    query = "select `date_time`,product,sum(qty),`packaging complete` from cooling group by `date_time`,product,`packaging complete` having (`date_time` between '"+datefrom+"' and '"+dateto+"') and `packaging complete` in "+pkgcomplete+" and product in "+product+";"
     print("hellolo",query)
     df = pd.read_sql(query, engine)
     return df
 
 def get_prod_report(dateto,datefrom,status,product,recall,shift):
-    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from Production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+status+" and product in "+product+" and `batch recall` in "+recall+" and shift in "+shift+";"
+    query = "select date_time, product, shift, batch, sum(flour), sum(remix), sum(yeast), sum(yield), status, `batch recall` from production group by date_time, product, shift, batch, status, `batch recall` having (date_time between '"+datefrom+"' and '"+dateto+"') and status in "+status+" and product in "+product+" and `batch recall` in "+recall+" and shift in "+shift+";"
     print("hellolo",query)
     df = pd.read_sql(query, engine)
     return df

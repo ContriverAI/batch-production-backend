@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def df_bg_cooling(tr,rt,tod):
-    query = "update Cooling set `remaining time` = '"+str(rt)+"' where trolley = "+str(tr)+" and `packaging complete` = 'No' and date_time = '"+tod+"';"
+    query = "update cooling set `remaining time` = '"+str(rt)+"' where trolley = "+str(tr)+" and `packaging complete` = 'No' and date_time = '"+tod+"';"
     with engine.begin() as conn:
         conn.execute(query)
 
@@ -17,7 +17,7 @@ def cooling_update():
     while(True):
         tod = str(datetime.now().date())
         try:
-            query = "select * from Cooling where `packaging complete` = 'No' and date_time = '"+tod+"';"
+            query = "select * from cooling where `packaging complete` = 'No' and date_time = '"+tod+"';"
             df = pd.read_sql(query,engine)
             for i in range(0,len(df)):
                 tr = df['trolley'][i]
@@ -42,7 +42,7 @@ def cooling_update():
                     tdelts = timedelta(days=0,seconds=tdelta.seconds, microseconds=tdelta.microseconds)
                     newtime = str(tdelts)
                 #    print("--newtime--------{}----------".format(newtime))
-                query = "update Cooling set `remaining time` = '"+str(newtime)+"' where trolley = "+str(tr)+";"
+                query = "update cooling set `remaining time` = '"+str(newtime)+"' where trolley = "+str(tr)+";"
                 #print("--query--{}".format(query))
                 x = threading.Thread(target=df_bg_cooling, args=(tr,newtime,tod,))
                 x.start()
