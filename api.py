@@ -156,9 +156,9 @@ def getusers():
 @cross_origin(supports_credentials=True)
 def createcoolingmain():
     data = request.json
-    print(data)
+    #print(data)
     confsdata = data_storage.configparams()
-    print(confsdata)
+    #print(confsdata)
     date = data['date']
     trolley = data['trolleyNo']
     product = data['product']
@@ -179,7 +179,7 @@ def createcoolingmain():
 @cross_origin(supports_credentials=True)
 def createcoolingpackaging():
     data = request.json
-    print(data)
+    #print(data)
     u_key = data['u_key']
     trolley = data['trolleyNo']
     status = data['status']
