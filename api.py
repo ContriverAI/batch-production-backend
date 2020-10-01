@@ -45,6 +45,7 @@ def softner_v2(l1):
 #     return t1
 
 def softner_t1(str1):
+    print("----------{}-----".format(str1))
     if str1[-2:] == "AM" and str1[:2] == "12": 
         return "00" + str1[2:-2] 
           
