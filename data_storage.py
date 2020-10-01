@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import sys
 
 def convert_to_date(date):
     new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
@@ -18,20 +19,20 @@ def cooling():
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
-    #try:
-    query = "select * from cooling where date_time = curdate();;"
-    df = pd.read_sql(query,engine)
-    index_num = list(np.where((df['trolley']==int(trolley)))[0])
-    if len(index_num)>0:
-        return 'Trolley Already Exists'
-    else:
-        query = "insert into cooling values('"+convert_to_date(date)+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done','00:00:00');"
-        print(query)
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully..!"
-   # except:
-    #    return "Something Went Wrong..!"
+    try:
+        query = "select * from cooling where date_time = curdate();;"
+        df = pd.read_sql(query,engine)
+        index_num = list(np.where((df['trolley']==int(trolley)))[0])
+        if len(index_num)>0:
+            return 'Trolley Already Exists'
+        else:
+            query = "insert into cooling values('"+convert_to_date(date)+"','"+str(trolley)+"','"+product+"','"+str(quant)+"','"+str(timein)+"','"+str(duration)+"','"+completetime+"','No','"+u_key+"','"+str(shftprod)+"','Not Done','00:00:00');"
+            print(query)
+            with engine.begin() as conn:
+                conn.execute(query)
+            return "Record Added Successfully..!"
+    except:
+        sys.exit()
 
 def create_cooling_packaging(u_key,trolley,status,time):
     # try:
