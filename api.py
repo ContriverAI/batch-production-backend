@@ -28,21 +28,37 @@ def softner_v2(l1):
     l1 = str(tuple(l1))
     return l1
 
-def softner_t1(t1):
-    try:
-        t1 = str(t1)
-        t1 = t1.replace(' ','')
-    except:
-        print("rem space not done")
-    try:
-        t1 = t1.replace('AM','')
-    except:
-        print("AM rem not done")
-    try:
-        t1 = t1.replace('PM','')
-    except:
-        print("PM rem not done")
-    return t1
+# def softner_t1(t1):
+#     try:
+#         t1 = str(t1)
+#         t1 = t1.replace(' ','')
+#     except:
+#         print("rem space not done")
+#     try:
+#         t1 = t1.replace('AM','')
+#     except:
+#         print("AM rem not done")
+#     try:
+#         t1 = t1.replace('PM','')
+#     except:
+#         print("PM rem not done")
+#     return t1
+
+def softner_t1(str1):
+    if str1[-2:] == "AM" and str1[:2] == "12": 
+        return "00" + str1[2:-2] 
+          
+    # remove the AM     
+    elif str1[-2:] == "AM": 
+        return str1[:-2] 
+      
+    # Checking if last two elements of time 
+    # is PM and first two elements are 12    
+    elif str1[-2:] == "PM" and str1[:2] == "12": 
+        return str1[:-2] 
+          
+    else:
+        return str(int(str1[:2]) + 12) + str1[2:8] 
 
 def getcoolingdata(socketio):
     coolingdata = data_storage.cooling()
