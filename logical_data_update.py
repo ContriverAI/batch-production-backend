@@ -35,7 +35,7 @@ def cooling_update():
                 tdelta = datetime.strptime(t1, FMT) - datetime.strptime(crnttime, FMT)
                 #print("--tdelta--------{}----------".format(tdelta))
                 #print("--tdelta seconds--------{}----------".format(tdelta.seconds))
-                if tdelta.seconds == 0 or tdelta.seconds > 5060:
+                if tdelta.seconds == 0 or tdelta.seconds > 10800:
                     newtime = "00:00:00"
                 #    print("--newtime--------{}----------".format(newtime))
                 else:
