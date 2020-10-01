@@ -28,6 +28,22 @@ def softner_v2(l1):
     l1 = str(tuple(l1))
     return l1
 
+def softner_t1(t1):
+    try:
+        t1 = str(t1)
+        t1 = t1.replace(' ','')
+    except:
+        print("rem space not done")
+    try:
+        t1 = t1.replace('AM','')
+    except:
+        print("AM rem not done")
+    try:
+        t1 = t1.replace('PM','')
+    except:
+        print("PM rem not done")
+    return t1
+
 def getcoolingdata(socketio):
     coolingdata = data_storage.cooling()
     coolingdata = coolingdata.to_json(orient="split")
@@ -47,6 +63,7 @@ def getcoolingdata(socketio):
         "store":storedata
     }
     socketio.emit('data',data)
+    time.sleep(20)
 
 def bg_thread_cooling_data():
     while True:
@@ -109,7 +126,7 @@ def createcoolingmain():
     product = data['product']
     shftnumber = data['shiftProduced']
     quant = data['quantity']
-    timein = data['coolingTime']
+    timein = softner_t1(data['coolingTime'])
     u_key = data['u_key']
     duration = confsdata.loc[(confsdata['productcode']==product),'duration'].iloc[0]
     completetime = duration + timein
@@ -128,7 +145,7 @@ def createcoolingpackaging():
     u_key = data['u_key']
     trolley = data['trolleyNo']
     status = data['status']
-    time = data['time']
+    time = softner_t1(data['time'])
     updatedata = data_storage.create_cooling_packaging(u_key,trolley,status,time)
     return updatedata
 
@@ -195,7 +212,7 @@ def configparams():
 def updateconfigparams():
     data = request.json
     productcode = data['productCode']
-    duration = data['duration']
+    duration = softner_t1(data['duration'])
     updateconfig = data_storage.updateconfig(productcode,duration)
     return updateconfig
 
@@ -228,7 +245,7 @@ def prodmainscreen():
     SHIFT = data['shift']
     PRODUCT = data['product']
     REMIX = data['remix']
-    Time = data['time']
+    Time = softner_t1(data['time'])
     u_key = data['u_key']
     prodmain = data_storage.prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,PRODUCT)
     return prodmain
@@ -238,7 +255,7 @@ def prodmainscreen():
 def prodcutionrecallscreen():
     data = request.json
     batch = data['batch']
-    time = data['time']
+    time = softner_t1(data['time'])
     cancel = data['cancel']
     u_key = data['u_key']
     recallscreen = data_storage.prod_recall_screen(batch,time,cancel,u_key)
@@ -250,7 +267,7 @@ def prodbakescreen():
     data = request.json
     batch = data['batch']
     status = data['status']
-    time = data['time']
+    time = softner_t1(data['time'])
     u_key = data['u_key']
     bakescreen = data_storage.bakescreen(batch,status,time,u_key)
     return bakescreen
