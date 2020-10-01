@@ -63,7 +63,6 @@ def getcoolingdata(socketio):
         "store":storedata
     }
     socketio.emit('data',data)
-    time.sleep(20)
 
 def bg_thread_cooling_data():
     while True:
