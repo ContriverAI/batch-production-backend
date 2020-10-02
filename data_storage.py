@@ -8,7 +8,7 @@ def convert_to_date(date):
     new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
     return new_date
 
-engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
+engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
 
 def get_users():
     users = pd.read_sql("select * from users;", engine)
@@ -22,7 +22,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
     try:
         query = "select * from cooling where date_time = curdate();;"
         df = pd.read_sql(query,engine)
-        index_num = list(np.where((df['trolley']==int(trolley)))[0])
+        index_num = list(np.where(((df['trolley']==int(trolley))&(df['shift number']==shftprod)))[0])
         if len(index_num)>0:
             return 'Trolley Already Exists'
         else:
