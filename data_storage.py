@@ -8,7 +8,7 @@ def convert_to_date(date):
     new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
     return new_date
 
-engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
+engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def get_users():
     users = pd.read_sql("select * from users;", engine)
@@ -108,37 +108,16 @@ def store_data():
     return data 
 
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,product):
-    #try:
     query = "select * from production where date_time = curdate();"
     df = pd.read_sql(query, engine)
-    index_num = list(np.where((df['batch']==Batch))[0])
-    shift = list(np.where((df['shift']==SHIFT))[0])
+    index_num = list(np.where(((df['batch']==str(Batch))&(df['shift'] == str(SHIFT))&(df['status']=='Unbaked')))[0])
     if len(index_num)>0:
-        if len(shift)>0:
-            index_num = list(np.where((df['status']=='Unbaked'))[0])
-            if len(index_num)>0:
-                return "Batch & Shift Already Exists With Unbaked Status..!"
-            else:
-                query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
-                with engine.begin() as conn:
-                    conn.execute(query)
-                return "Successfully Record Added"
-        else:
-            index_num = list(np.where((df['status']=='Unbaked'))[0])
-            if len(index_num)>0:
-                return "Batch & Shift Already Exists With Unbaked Status..!"
-            else:
-                query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
-                with engine.begin() as conn:
-                    conn.execute(query)
-                return "Successfully Record Added"
+            return "Batch & Shift Already Exists With Unbaked Status..!"
     else:
         query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
-    #except:
-    #    return "Something Went Wrong"
 
 def prod_recall_screen(batch,time,cancel,u_key):
     try:

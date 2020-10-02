@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 
 from sqlalchemy import create_engine
-engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
+engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def df_bg_cooling(tr,rt,tod):
     query = "update cooling set `remaining time` = '"+str(rt)+"' where trolley = "+str(tr)+" and `packaging complete` = 'No' and date_time = '"+tod+"';"
