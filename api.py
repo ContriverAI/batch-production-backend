@@ -13,7 +13,7 @@ import logical_data_update
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-async_mode = "threading"
+async_mode = "eventlet"
 socketio = SocketIO(app, async_mode=async_mode, cors_allowed_origins="*")
 thread = None
 thread_lock = Lock()
