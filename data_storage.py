@@ -138,13 +138,15 @@ def bakescreen(batch,status,time,u_key):
         return "Something Went Wrong"
 
 def storereceivingscreen(date,product,St_qty_recv,rough_qty_recv,pkg_supervisor,u_key):
-    try:
-        query = "insert into store values('"+convert_to_date(date)+"','"+str(product)+"','"+str(St_qty_recv)+"','"+str(rough_qty_recv)+"','0','0','0','0','0','"+str(u_key)+"','"+str(pkg_supervisor)+"','"+date+"',' ');"
-        with engine.begin() as conn:
-            conn.execute(query)
-        return "Record Added Successfully"
-    except:
-        return "Something Went Wrong"
+    #try:
+    dt = date.split('-')
+    query = "insert into store values('"+str(dt[2])+'-'+str(dt[1])+'-'+str(dt[0])+"','"+str(product)+"','"+str(St_qty_recv)+"','"+str(rough_qty_recv)+"','0','0','0','0','0','"+str(u_key)+"','"+str(pkg_supervisor)+"','"+str(dt[2])+'-'+str(dt[1])+'-'+str(dt[0])+"',' ');"
+    print(query)
+    with engine.begin() as conn:
+        conn.execute(query)
+    return "Record Added Successfully"
+    #except:
+    #    return "Something Went Wrong"
 
 def store_dispatched_screen(date,product,std_dispatched,rough_dispatched,rough_returned,dsp_supervisor,u_key):
     try:
