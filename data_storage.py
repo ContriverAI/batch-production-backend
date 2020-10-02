@@ -8,8 +8,8 @@ def convert_to_date(date):
     new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
     return new_date
 
-#engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
-engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
+engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
+#engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def get_users():
     users = pd.read_sql("select * from users;", engine)
