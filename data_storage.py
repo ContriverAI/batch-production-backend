@@ -111,8 +111,11 @@ def store_data():
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,product):
     query = "select * from production where date_time = curdate();"
     df = pd.read_sql(query, engine)
-    index_num = list(np.where(((df['batch']==Batch)&(df['shift'] == str(SHIFT))&(df['status']=='Unbaked')))[0])
-    batch_check = list(np.where((df['batch']==Batch))[0])
+    print(type(Batch),type(SHIFT))
+    print(type(df['batch'][0]), type(df['shift'][0]))
+    index_num = list(np.where(((df['batch']==int(Batch))&(df['shift'] == SHIFT)&(df['status']=='Unbaked')))[0])
+    batch_check = list(np.where((df['batch']==int(Batch)))[0])
+    print(batch_check)
     if len(batch_check)>0:
         if len(index_num)>0:
             return "Batch & Shift Already Exists With Unbaked Status..!"
