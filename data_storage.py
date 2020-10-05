@@ -9,7 +9,7 @@ def convert_to_date(date):
     return new_date
 
 engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
-#engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
+# engine = create_engine("mysql+pymysql://root:Dev@1234@@35.192.39.115/batch?host=35.192.39.115")
 
 def get_users():
     users = pd.read_sql("select * from users;", engine)
@@ -111,18 +111,20 @@ def store_data():
 def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,Time,product):
     query = "select * from production where date_time = curdate();"
     df = pd.read_sql(query, engine)
+    print(df)
     print(type(Batch),type(SHIFT))
-    print(type(df['batch'][0]), type(df['shift'][0]))
-    index_num = list(np.where(((df['batch']==int(Batch))&(df['shift'] == SHIFT)&(df['status']=='Unbaked')))[0])
-    batch_check = list(np.where((df['batch']==int(Batch)))[0])
+    print(type(df['batch']), type(df['shift']))
+    index_num = list(np.where(((df['batch']==int(Batch))&(df['shift'] == int(SHIFT))&(df['status']=='Unbaked')))[0])
+    batch_check = list(np.where(((df['batch']==int(Batch))&(df['shift']== int(SHIFT))))[0])
     print(batch_check)
+    print(index_num)
     if len(batch_check)>0:
         if len(index_num)>0:
             return "Batch & Shift Already Exists With Unbaked Status..!"
         else:
             return "Batch Already Exists"
     else:
-        query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
+        query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"',"+str(SHIFT)+",'"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"',"+str(Batch)+",'Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
@@ -230,5 +232,11 @@ def get_prod_report(dateto,datefrom,status,product,recall,shift):
 def get_store_report(dateto,datefrom,product):
     query = "select date_time,product,sum(`qty received standard`),sum(`qty received rough`), sum(`dispatched standard`), sum(`dispatched rough`), sum(`rough returned bread`), sum(`bread in store`), sum(`rough bread in store`), pkg_supervisor, dsp_supervisor from store group by date_time,product,pkg_supervisor,dsp_supervisor having (date_time between '"+datefrom+"' and '"+dateto+"') and product in "+product+";"
     print("hellolo",query)
+    df = pd.read_sql(query, engine)
+    return df
+
+def datewisebatch(dateto,shift):
+    query = "select batch from production where date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+";"
+    print(query)
     df = pd.read_sql(query, engine)
     return df

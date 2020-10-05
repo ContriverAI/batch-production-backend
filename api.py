@@ -514,6 +514,18 @@ def storereport():
     report = json.dumps(report)
     return report
 
+@app.route('/get/datewisebatch', methods = ['GET', 'POST'])
+@cross_origin(supports_credentials=True)
+def datewise_batch():
+    data  = request.json
+    dateto = data['date']
+    shift = data['shift']
+    report = data_storage.datewisebatch(dateto,shift)
+    report = report.to_json(orient="split")
+    report = json.loads(report)
+    report = json.dumps(report)
+    return report
+
 if __name__ == '__main__':
     y = threading.Thread(target=logical_data_update.cooling_update)
     y.start()
