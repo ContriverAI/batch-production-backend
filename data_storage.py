@@ -134,7 +134,7 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
         
 def prod_recall_screen(batch,time,cancel,u_key,dateto,shift):
     try:
-        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+";"
+        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = '"+convert_to_date(dateto)+"' and shift = "+str(shift)+";"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
@@ -239,7 +239,7 @@ def get_store_report(dateto,datefrom,product):
     return df
 
 def datewisebatch(dateto,shift):
-    query = "select batch from production where date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+";"
+    query = "select batch from production where date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+" and `batch recall`='No';"
     print(query)
     df = pd.read_sql(query, engine)
     return df
