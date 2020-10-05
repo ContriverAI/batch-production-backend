@@ -5,7 +5,10 @@ from datetime import datetime
 import sys
 
 def convert_to_date(date):
-    new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
+    try:
+        new_date = str(datetime.strptime(date,"%d-%m-%Y").date())
+    except:
+        new_date = str(datetime.strptime(date,"Y%-%m-%d").date())
     return new_date
 
 engine = create_engine("mysql+pymysql://testuser:CFB98765@localhost/batch?host=localhost")
