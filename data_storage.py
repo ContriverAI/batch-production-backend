@@ -113,14 +113,17 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
     df = pd.read_sql(query, engine)
     index_num = list(np.where(((df['batch']==Batch)&(df['shift'] == str(SHIFT))&(df['status']=='Unbaked')))[0])
     batch_check = list(np.where((df['batch']==Batch))[0])
-    if len(index_num)>0 and len(batch_check)>0:
+    if len(batch_check)>0:
+        if len(index_num)>0:
             return "Batch & Shift Already Exists With Unbaked Status..!"
+        else:
+            return "Batch Already Exists"
     else:
         query = "insert into production values('"+convert_to_date(Date)+"','"+str(FLOUR)+"','"+str(SHIFT)+"','"+str(REMIX)+"','"+str(YEAST)+"','"+str(Time)+"',' ','"+str(u_key)+"','"+str(Batch)+"','Unbaked','"+str(Yield_val)+"','No',' ','"+product+"');"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Record Added"
-
+        
 def prod_recall_screen(batch,time,cancel,u_key):
     try:
         query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = curdate();"
