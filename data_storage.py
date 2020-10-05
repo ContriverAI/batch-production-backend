@@ -132,9 +132,9 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
             conn.execute(query)
         return "Successfully Record Added"
         
-def prod_recall_screen(batch,time,cancel,u_key):
+def prod_recall_screen(batch,time,cancel,u_key,dateto,shift):
     try:
-        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = curdate();"
+        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+";"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"

@@ -295,7 +295,9 @@ def prodcutionrecallscreen():
     time = softner_t1(data['time'])
     cancel = data['cancel']
     u_key = data['u_key']
-    recallscreen = data_storage.prod_recall_screen(batch,time,cancel,u_key)
+    dateto = data['date']
+    shift = data['shift']
+    recallscreen = data_storage.prod_recall_screen(batch,time,cancel,u_key,dateto,shift)
     return recallscreen
 
 @app.route('/get/production_bake_screen', methods = ['GET', 'POST'])
