@@ -19,7 +19,7 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from cooling where date_time = curdate() order by `remaining time` asc;", engine)
+    data = pd.read_sql("select * from cooling;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
@@ -102,12 +102,12 @@ def updateconfig(productcode,duration):
         return  "Something Went Wrong..!"
 
 def production_data():
-    query = "select * from production where date_time = curdate();;"
+    query = "select * from production;"
     data = pd.read_sql(query, engine)
     return data
 
 def store_data():
-    query = "select * from store where date_time = curdate();;"
+    query = "select * from store;"
     data = pd.read_sql(query, engine)
     return data 
 
