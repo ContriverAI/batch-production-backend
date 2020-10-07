@@ -23,7 +23,7 @@ def calculator():
             a1 = data['date_time'][i]
             a2 = data['complete time'][i]
             a1 = str(a1).split('-')
-            a2 = str(a2).replace('5 days ','')
+            # a2 = str(a2).replace('5 days ','')
             a2 = str(a2).split(':')
             a = datetime(int(a1[0]), int(a1[1]), int(a1[2]), int(a2[0]), int(a2[1]), int(a2[2]), 0)
             b = datetime.now()
