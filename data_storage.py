@@ -102,7 +102,7 @@ def updateconfig(productcode,duration):
         return  "Something Went Wrong..!"
 
 def production_data():
-    query = "select * from production;"
+    query = "select * from production order by date_time desc;"
     data = pd.read_sql(query, engine)
     return data
 
