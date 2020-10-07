@@ -531,4 +531,4 @@ def datewise_batch():
 if __name__ == '__main__':
     y = threading.Thread(target=logical_data_update.cooling_update)
     y.start()
-    socketio.run(app, debug=True,port=9001)
+    socketio.run(app, debug=True,host = '0.0.0.0',port=9001)

@@ -19,7 +19,7 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from cooling;", engine)
+    data = pd.read_sql("select * from cooling order by `complete time` asc;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
@@ -40,7 +40,7 @@ def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duratio
 
 def create_cooling_packaging(u_key,trolley,status,time):
     # try:
-    query = "update cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where trolley = "+str(trolley)+" and date_time = curdate();"
+    query = "update cooling set `packaging complete` = '"+status+"', `complete time` = '"+time+"', u_key = '"+u_key+"' where trolley = "+str(trolley)+" and date_time >= subdate(curdate(),1);"
     print(query)
     with engine.begin() as conn:
         conn.execute(query)
@@ -143,7 +143,7 @@ def prod_recall_screen(batch,time,cancel,u_key,dateto,shift):
 
 def bakescreen(batch,status,time,u_key):
     try:
-        query = "update production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = curdate();"
+        query = "update production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time >= subdate(curdate(),1);"
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Updated Batch"
