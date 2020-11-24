@@ -2,7 +2,15 @@ from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from datetime import timedelta
 import sys
+
+def mstodate(ms):
+    target_date_time_ms = int(ms) # or whatever
+    base_datetime = datetime( 1970, 1, 1 )
+    delta = timedelta( 0, 0, 0, target_date_time_ms )
+    target_date = base_datetime + delta
+    return target_date.date()
 
 def convert_to_date(date):
     try:
@@ -19,7 +27,7 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from cooling order by `complete time` asc;", engine)
+    data = pd.read_sql("select * from cooling order by `date_time` desc, `complete time` asc;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
@@ -107,7 +115,7 @@ def production_data():
     return data
 
 def store_data():
-    query = "select * from store;"
+    query = "select * from store order by date_time desc;"
     data = pd.read_sql(query, engine)
     return data 
 
@@ -134,16 +142,17 @@ def prod_main_Screen(Date,Batch,YEAST,FLOUR,u_key,Yield_val,SHIFT,PRODUCT,REMIX,
         
 def prod_recall_screen(batch,time,cancel,u_key,dateto,shift):
     try:
-        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = '"+str(batch)+"' and date_time = '"+convert_to_date(dateto)+"' and shift = "+str(shift)+";"
+        query = "update production set `recall time` = '"+str(time)+"', `batch recall` = '"+str(cancel)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = '"+dateto+"' and shift = "+str(shift)+";"
         with engine.begin() as conn:
             conn.execute(query)
         return "Updated Successfully"
     except:
         return "Something Went Wrong"
 
-def bakescreen(batch,status,time,u_key):
+def bakescreen(batch,status,time,u_key,shift,date):
     try:
-        query = "update production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time >= subdate(curdate(),1);"
+        query = "update production set `Baking Time` = '"+str(time)+"', status = '"+str(status)+"', u_key = '"+str(u_key)+"' where batch = "+str(batch)+" and date_time = '"+str(mstodate(date))+"' and shift = '"+str(shift)+"';"
+        print(query)
         with engine.begin() as conn:
             conn.execute(query)
         return "Successfully Updated Batch"
@@ -239,7 +248,7 @@ def get_store_report(dateto,datefrom,product):
     return df
 
 def datewisebatch(dateto,shift):
-    query = "select batch from production where date_time = '"+convert_to_date(dateto)+"' and shift = "+shift+" and `batch recall`='No';"
+    query = "select batch from production where date_time = '"+dateto+"' and shift = '"+shift+"' and `batch recall`='No' and status = 'Unbaked';"
     print(query)
     df = pd.read_sql(query, engine)
     return df

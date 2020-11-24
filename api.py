@@ -9,7 +9,7 @@ import socket
 from threading import Lock, Timer
 import time
 from flask_cors import CORS, cross_origin
-# import time_calculator
+#import time_calculator
 import logical_data_update
 
 app = Flask(__name__)
@@ -102,6 +102,7 @@ def getcoolingdata(socketio):
         "store":storedata
     }
     socketio.emit('data',data)
+    # time.sleep(30)
 
 def bg_thread_cooling_data():
     while True:
@@ -309,7 +310,9 @@ def prodbakescreen():
     status = data['status']
     time = softner_t1(data['time'])
     u_key = data['u_key']
-    bakescreen = data_storage.bakescreen(batch,status,time,u_key)
+    shift = data['shift']
+    date = data['date']
+    bakescreen = data_storage.bakescreen(batch,status,time,u_key,shift, date)
     return bakescreen
 
 @app.route('/get/store_receiving_screen', methods = ['GET', 'POST'])
