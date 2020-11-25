@@ -10,7 +10,7 @@ from threading import Lock, Timer
 import time
 from flask_cors import CORS, cross_origin
 #import time_calculator
-import logical_data_update
+#import logical_data_update
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -533,6 +533,6 @@ def datewise_batch():
     return report
 
 if __name__ == '__main__':
-    y = threading.Thread(target=logical_data_update.cooling_update)
-    y.start()
-    socketio.run(app, debug=True,host = '0.0.0.0',port=9001)
+#    y = threading.Thread(target=logical_data_update.cooling_update)
+#    y.start()
+    socketio.run(app, debug=True,host = '0.0.0.0',port=9003)
