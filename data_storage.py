@@ -27,7 +27,7 @@ def get_users():
     return users
 
 def cooling():
-    data = pd.read_sql("select * from cooling order by `date_time` desc, `complete time` asc;", engine)
+    data = pd.read_sql("select * from cooling order by `date_time` desc, `remaining time` asc;", engine)
     return data
 
 def create_cooling_main(date,trolley,product,shftprod,quant,timein,u_key,duration,completetime):
